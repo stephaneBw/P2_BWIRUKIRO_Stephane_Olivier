@@ -1,35 +1,40 @@
-import csv
 import requests
 from bs4 import BeautifulSoup
 
 
 def info_from_page(page_url):
-    """Function scrapes info on the page and write it in a csv file"""
+    """
+    :param page_url: prend en entrée un lien vers une page internet
+    La fonction collecte les infos se trouvant sur la page
+    :return: une liste qui contient les infos collectées
+    """
+    info = []  # list qui va contenir les infos scrapées
     response = requests.get(page_url)
 
     if response.ok:
         soup = BeautifulSoup(response.content, 'html.parser')
-        product_info = soup.findAll('tr')
+
+        # recuperation de l'url de l'image de couverture
+        image = soup.find('img')
+        image_url = 'http://books.toscrape.com' + image['src'].removeprefix('../..')
+
+        # recuperation de la categorie auquel appartient le livre
+        category_li = soup.findAll('li')
+        category = category_li[2].text.removeprefix('\n').removesuffix('\n')
+
+        # recuperation du titre du livre
         title = soup.find('h1')
-        info = [page_url, title.text]
-        info_id = ['product_page_url', 'title']
+        info = [page_url, title.text]  # premiere partie des infos scrapées
+
+        # recuperer les infos qui sont dans la partie 'Product information'
+        product_info = soup.findAll('tr')
         for i in product_info:
             th = i.find('th')
-            td = i.find('td')
-            info_id.append(th.text)
-            info.append(td.text)
-        info_id.remove('Product Type')
-        info_id.remove('Tax')
-        info.remove('£0.00')
-        info.remove('Books')
-        print(info_id)
-        print(info)
-    """
-        with open('product_info.csv', 'w') as csvfile:
-            writer = csv.writer(csvfile)
-            writer.writerow(info_id)
-            writer.writerow(info)
-    """
+            if th.text != 'Tax' and th.text != 'Product Type':
+                td = i.find('td')
+                info.append(td.text)
 
-
-info_from_page('http://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html')
+        # ajouter de l'image_url et de la categorie dans la liste info
+        info.append(category)
+        info.append(image_url)
+    return info
