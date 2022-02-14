@@ -34,6 +34,11 @@ def info_from_page(page_url):
                 td = i.find('td')
                 info.append(td.text)
 
+        # ajouter la description du produit
+        product_description = soup.find('article', {'class': 'product_page'})
+        p = product_description.select('p')
+        info.append(p[3].text)
+
         # ajouter de l'image_url et de la categorie dans la liste info
         info.append(category)
         info.append(image_url)

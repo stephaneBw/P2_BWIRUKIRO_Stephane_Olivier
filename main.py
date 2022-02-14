@@ -11,7 +11,7 @@ if response.ok:
     soup = BeautifulSoup(response.text, 'html.parser')
     tag_links = soup.findAll('h3')
     info_id = ['product_page_url', 'title', 'universal_ product_code (upc)', 'price_including_tax',
-               'price_excluding_tax', 'number_available', 'review_rating', 'category', 'image_url']
+               'price_excluding_tax', 'number_available', 'review_rating', 'product_description', 'category', 'image_url']
     infos = []
     # print('\n' + str(len(tag_links)) + '\n')
     links = []
