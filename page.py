@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 def info_from_page(page_url):
     """
     :param page_url: prend en entrée un lien vers une page internet
-    La fonction collecte les infos se trouvant sur la page
+    La fonction collecte les infos se trouvant sur la page d'un seul produit
     :return: une liste qui contient les infos collectées
     """
     info = []  # list qui va contenir les infos scrapées
