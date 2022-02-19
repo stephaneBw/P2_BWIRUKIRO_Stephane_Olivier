@@ -18,13 +18,35 @@ while True:
         break
 url = 'http://books.toscrape.com/catalogue/'
 
-# La list qui contient l'en-tête des infos scrapes
+# La list qui contient l’en-tête des infos scrapes
 info_id = ['product_page_url', 'title', 'universal_ product_code (upc)',
            'price_including_tax', 'price_excluding_tax', 'number_available',
            'review_rating', 'product_description', 'category', 'image_url']
 
 if choix == 1:
-    pass
+    nom_category = []
+    count = 0
+    for cl in category_link:
+        nom_category.append(cl[25:].removesuffix('/index.html'))
+    print('voici la liste des category disponibles\n', nom_category)
+    choix_category = input('entrez le nom de la category que vous voulez consulter: ')
+    for c in nom_category:
+        if choix_category == c:
+            category_infos = []  # va contenir les données de tous les livres d’une category
+            liens = category_page(url.removesuffix('catalogue/') + category_link[count])
+            for lien in liens:
+                for l in lien:
+                    by_category_info = info_from_page(l)  # infos d’un seul livre
+                    category_infos.append(by_category_info)
+            # mettre les infos dans un fichier csv
+            with open((c + '.csv'), 'w', newline='', encoding='utf-8') as file:
+                writer = csv.writer(file)
+                writer.writerow(info_id)
+                for i in category_infos:
+                    writer.writerow(i)
+        if count == 49:
+            print('le mot entré ne correspond à aucune category de la liste')
+        count += 1
 
 if choix == 2:
     for cl in category_link:
@@ -35,7 +57,7 @@ if choix == 2:
 
         for lien in liens:
             for l in lien:
-                by_category_info = info_from_page(l)    # infos d’un seul livre
+                by_category_info = info_from_page(l)  # infos d’un seul livre
                 category_infos.append(by_category_info)
 
         # mettre les infos dans un fichier csv
