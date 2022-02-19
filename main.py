@@ -1,63 +1,47 @@
 import csv
-import requests
-from bs4 import BeautifulSoup
-from page import info_from_page
 from category import category_link, category_page
+from page import info_from_page
 
-# demander a l’utilisateur de choisir s’il veut avoir les infos par categories
-choix = input("Voulez vous voir les infos par categorie de livre ? si oui entrez 1"
-              "si non entrez 2 : ")
-
+# demander à l’utilisateur s’il veut consulter les données d’une seule catégorie
+# ou s’il préfère avoir les fichiers sur toutes les categories
+choix = 3
+while True:
+    try:
+        choix = int(input('\nSi vous voulez seulement consulter une catégorie, entrez 1'
+                          '\nsinon entrez 2 et vous aurez toutes les catégories'
+                          '\nvotre choix: '))
+    except ValueError:
+        print('Vous n’avez pas entré un chiffre')
+    if choix != 1 and choix != 2:
+        print('Vous devez choisir un chiffre qui soit 1 ou 2')
+    else:
+        break
 url = 'http://books.toscrape.com/catalogue/'
 
-# La list qui contient l'en-tête des infos scrapées
+# La list qui contient l'en-tête des infos scrapes
 info_id = ['product_page_url', 'title', 'universal_ product_code (upc)',
            'price_including_tax', 'price_excluding_tax', 'number_available',
            'review_rating', 'product_description', 'category', 'image_url']
 
-if choix == '1':
-    page = 'page-' + input('Entrez le numero de la page que vous voulez consulter: ') + '.html'
+if choix == 1:
+    pass
 
-    response = requests.get(url + page)  # request
-    if response.ok:
-        soup = BeautifulSoup(response.text, 'html.parser')
-        tag_links = soup.findAll('h3')
-
-        infos = []  # list qui va contenir les infos scrapées
-        links = []  # list qui va cntenir les links vers les livres se trouvant sur une page
-
-        # boucle pour recuperer les liens des livres se trouvant sur une page
-        for tl in tag_links:
-            a = tl.find('a')
-            links.append(url + a['href'])
-
-        # boucle pour recuperer les infos d’un seul livre à la fois
-        for link in links:
-            info_source = info_from_page(link)
-            infos.append(info_source)
-
-        # creation du fichier csv
-        with open('product_info.csv', 'w') as csvfile:
-            writer = csv.writer(csvfile)
-            writer.writerow(info_id)
-            for i in infos:
-                writer.writerow(i)
-
-if choix == '2':
+if choix == 2:
     for cl in category_link:
-        liens = category_page(url.removesuffix('catalogue/') + cl)
-        #print(liens)
-        nom_fichier = str(cl[25:].removesuffix('/index.html'))
-        category_infos = []
+        liens = category_page(url.removesuffix('catalogue/') + cl, links=None)
+        # nom_fichier est le nom que va prendre le fichier csv pour chaque category
+        nom_fichier = str(cl[25:].removesuffix('/index.html')) + '.csv'
+        category_infos = []  # va contenir les données de tous les livres d’une category
 
         for lien in liens:
-            by_category_info = info_from_page(lien)
-            #print(by_category_info)
-            category_infos.append(by_category_info)
-            #print(category_infos)
+            for l in lien:
+                by_category_info = info_from_page(l)    # infos d’un seul livre
+                category_infos.append(by_category_info)
 
-        #with open(nom_fichier, 'w') as csvfile:
-            #writer = csv.writer(csvfile)
-            #writer.writerow(info_id)
-            #for i in category_infos:
-                #writer.writerow(i)
+        # mettre les infos dans un fichier csv
+        with open(nom_fichier, 'w', newline='', encoding='utf-8') as file:
+            writer = csv.writer(file)
+            writer.writerow(info_id)
+            for i in category_infos:
+                writer.writerow(i)
+        print('la category ', nom_fichier, ' est termine')
