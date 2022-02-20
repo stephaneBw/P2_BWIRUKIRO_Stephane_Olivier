@@ -44,7 +44,7 @@ if choix == 1:
                 writer.writerow(info_id)
                 for i in category_infos:
                     writer.writerow(i)
-        if count == 49:
+        elif count == 49:
             print('le mot entré ne correspond à aucune category de la liste')
         count += 1
 
