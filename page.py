@@ -2,44 +2,17 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def info_from_page(page_url):
-    """
-    :param page_url: prend en entrée un lien vers une page internet
-    La fonction collecte les infos se trouvant sur la page d'un seul produit
-    :return: une liste qui contient les infos collectées
-    """
-    info = []  # list qui va contenir les infos scrapées
-    response = requests.get(page_url)
-
-    if response.ok:
-        soup = BeautifulSoup(response.content, 'html.parser')
-
-        # recuperation de l'url de l'image de couverture
-        image = soup.find('img')
-        image_url = 'http://books.toscrape.com' + image['src'].removeprefix('../..')
-
-        # recuperation de la categorie auquel appartient le livre
-        category_li = soup.findAll('li')
-        category = category_li[2].text.removeprefix('\n').removesuffix('\n')
-
-        # recuperation du titre du livre
-        title = soup.find('h1')
-        info = [page_url, title.text]  # premiere partie des infos scrapées
-
-        # recuperer les infos qui sont dans la partie 'Product information'
+class Page:
+    def __init__(self, url):
+        self.html = requests.get(url)
+        soup = BeautifulSoup(self.html.content, 'html.parser')
+        self.title = soup.find('h1').text
+        self.image_url = 'http://books.toscrape.com' + soup.find('img')['src'].removeprefix('../..')
+        self.category = soup.findAll('li')[2].text.replace('\n', '')
+        self.product_description = soup.find('article', {'class': 'product_page'}).select('p')[3].text
         product_info = soup.findAll('tr')
-        for i in product_info:
-            th = i.find('th')
-            if th.text != 'Tax' and th.text != 'Product Type':
-                td = i.find('td')
-                info.append(td.text)
-
-        # ajouter la description du produit
-        product_description = soup.find('article', {'class': 'product_page'})
-        p = product_description.select('p')
-        info.append(p[3].text)
-
-        # ajouter de l'image_url et de la categorie dans la liste info
-        info.append(category)
-        info.append(image_url)
-    return info
+        self.upc = product_info[0].find('td').text
+        self.price_excluding_tax = product_info[2].find('td').text
+        self.price_including_tax = product_info[3].find('td').text
+        self.number_available = product_info[5].find('td').text
+        self.review_rating = product_info[6].find('td').text
