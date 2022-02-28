@@ -23,9 +23,3 @@ class Page:
         self.price_including_tax = product_info[3].find('td').text  # prix avec taxe du livre
         self.number_available = product_info[5].find('td').text  # le nombre de livres disponibles
         self.review_rating = product_info[6].find('td').text  # evaluation du livre
-
-
-p = Page('http://books.toscrape.com/catalogue/its-only-the-himalayas_981/index.html')
-liste = [p.url, p.title, p.image_url, p.category, p.upc, p.price_including_tax,
-         p.price_excluding_tax, p.number_available, p.review_rating]
-[print(i) for i in liste]
