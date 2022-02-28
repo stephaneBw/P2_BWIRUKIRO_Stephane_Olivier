@@ -15,22 +15,22 @@ if response.ok:
         a = i.find('a')
         category_link.append(a['href'])
 
-    del category_link[0]  # enlever le premier lien, car il renvoie à l'ensemble des livres
+    del category_link[0]  # enlever le premier lien, car il renvoie à l’ensemble des livres
 
 
 def category_page(category_url, links=None, count=1):
     """
     :param count: cette variable compte le nombre de pages parcourues
     :param links: list qui va contenir les liens de tous les livres
-    :param category_url: prend en entrée l’url d’une category
+    :param category_url: prend en entrée sortie’url d’une category
     :return: la liste des urls des livres de la category en question
     """
     if links is None:
         links = []
 
-    reponse = requests.get(category_url)
-    if reponse.ok:
-        category_soup = BeautifulSoup(reponse.text, 'html.parser')
+    category_html = requests.get(category_url)
+    if category_html.ok:
+        category_soup = BeautifulSoup(category_html.text, 'html.parser')
 
         # récupérer les infos sur la page
         links.append(by_page_category(category_url))
