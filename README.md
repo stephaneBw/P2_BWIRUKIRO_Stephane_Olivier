@@ -1,21 +1,51 @@
-Pour lancer le programme, il faut avoir python3 installé
-Ensuite il faut lancer main.py uniquement.
-Le programme va vous demander de faire un choix entre :
-    1. Consulter une seule catégorie de livre
-    2. Consulter toutes les catégories de livres
-Faites votre choix en tapant le numéro correspondant.
+## petit programme de scrapping
 
-Si vous choisissez de consulter une seule category,
-vous allez devoir taper le nom de la category exactement comme
-il est écrit dans la liste qui des categories que vous allez voir apparaître.
-Un fichier csv contenant les données collectées va être créé
-dans le repertoire courant.
+### Description du programme
+C’est un programme qui va scraper une [boutique de livre en ligne](http://books.toscrape.com/).
+Il va récolter plusieurs infos telles que le titre du livre,
+sa description, ... et mettre ces infos dans un fichier csv qui a le nom de la category.
+Il va aussi produire un dossier qui a le nom de la category
+et y mettre toutes les images de couverture des livres de la category.
 
-Si vous choisissez de consulter toutes les categories,
-50 fichiers csv vont être créés dans le répertoire courant.
+### Étape 1 : installation de python3
+Si vous avez python3 installé, sautez cette étape.  
+Pour lancer le programme, vous devez avoir python3 installé.  
+Visitez ce [lien](https://www.python.org/downloads/) et suivez les étapes d’installation
 
-Pour consulter idéalement ces fichiers, ouvrez:
-Excel->Données->Obtenir des données->A partir d'un fichier->A partir d'un fichier texte csv
+### Étape 2 : Création d’un environnement virtuel en python
+Télécharger tous les fichiers du dépôt git et mettez dans un dossier spécifique.
+Dans ce même dossier, il va falloir créer un environnement virtuel dans lequel
+on va installer les modules nécessaires. 
+La liste de ces modules se trouve dans le requirement.txt.  
+Pour créer cet environnement, cliquez sur ce [lien](https://docs.python.org/fr/3/library/venv.html) et suivez les 
+étapes.
 
-Vous devrez selectionner le(s) fichier(s) en question en naviguant
+### Étape 3 : installer les modules nécessaires
+À l’aide d’un terminal, installez pip. 
+* Pour macOS, tapez : 
+  - sudo easy_install pip
+  - sudo pip install --upgrade pip
+* Pour windows et Linux : pip est déjà installé
+
+Ensuite, naviguez jusqu’au dossier où se trouve 
+les fichiers téléchargés .py ainsi que votre environnement virtuel.  
+Enfin, installez les modules avec pip comme suit :  
+Tapez 'pip install [nom module]'
+
+### Étape 4 : lancer le programme
+Il faut lancer main.py uniquement.
+Vous pouvez le faire dans le terminal.  
+Si vous êtes situé dans le repertoire où se trouve les fichiers 
+Tapez : 'Python main.py'  
+Vous pouvez aussi lancer le programme dans votre éditeur
+de code préféré.
+
+Les fichiers csv et les dossiers images vont être
+créés dans le repertoire courant.
+
+Pour consulter idéalement ces fichiers, ouvrez
+Excel→Données→Obtenir des données→À partir d’un fichier→À partir d’un fichier texte csv→sélectionner le fichier
+que vous voulez consulter
+
+Vous devrez sélectionner le(s) fichier(s) en question en naviguant
 jusqu’à leur emplacement. 
