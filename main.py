@@ -49,11 +49,11 @@ for cl in category_link:
     # télécharger les images de couverture
     cwd = os.getcwd()
     try:
-        new = nom_fichier + 'images'
+        new = nom_fichier.removesuffix('.csv') + '_images'
         os.mkdir(os.path.join(cwd, new))
     except FileExistsError:
         print('dans le repertoire courant, il y a un dossier qui a le même nom : ',
-              nom_fichier + 'images')
+              nom_fichier + '_images')
         new = input('Veuillez entrer un autre nom manuellement : ')
         os.mkdir(os.path.join(cwd, new))
 
@@ -62,7 +62,8 @@ for cl in category_link:
 
     # scraper les photos de couverture
     for s in images:
-        with open(str(s[0]) + '.jpg', 'wb+') as image_file:
+        img_name = s[0][:7].replace(':', '-').replace('/', '_').replace("\'", ' ')
+        with open(img_name.replace('"', '').replace("'", '') + '.jpg', 'wb+') as image_file:
             image_file.write(requests.get(s[1]).content)
     os.chdir(cwd)
-    print('la category ', nom_fichier, ' est termine')
+    print('la category ', nom_fichier.removesuffix('.csv'), ' est termine')
