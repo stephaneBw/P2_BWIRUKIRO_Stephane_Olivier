@@ -1,0 +1,17 @@
+python
+import tkinter as tk
+
+def scrape_books():
+    # Add your existing scraping code here
+    print("Scraping books...")
+
+# Create the main window
+root = tk.Tk()
+root.title("Book Scraper GUI")
+
+# Create a button to trigger the scraping process
+scrape_button = tk.Button(root, text="Scrape Books", command=scrape_books)
+scrape_button.pack()
+
+# Run the main event loop
+root.mainloop()
